@@ -13,7 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
@@ -87,6 +89,16 @@ public class ChatFragment extends Fragment implements
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(mConnectionInfo.getName());
 
         ((MainActivity) getActivity()).addActionBarDrawerToggle(toolbar);
+
+        ImageButton toolbarButtonLeft = rootView.findViewById(R.id.buttonLeft);
+        toolbarButtonLeft.setOnClickListener(v -> Toast.makeText(getContext(),
+                "Button left clicked",
+                Toast.LENGTH_LONG).show());
+
+        ImageButton toolbarButtonRight = rootView.findViewById(R.id.buttonRight);
+        toolbarButtonRight.setOnClickListener(v -> Toast.makeText(getContext(),
+                "Button right clicked",
+                Toast.LENGTH_LONG).show());
 
         mSectionsPagerAdapter = new ChatPagerAdapter(getContext(), getChildFragmentManager(), mConnectionInfo, savedInstanceState);
 
