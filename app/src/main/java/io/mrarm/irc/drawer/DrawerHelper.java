@@ -63,7 +63,7 @@ public class DrawerHelper implements ServerConnectionManager.ConnectionsListener
         mAdapter.addTopMenuItem(mSearchItem);
         mManageServersItem = new DrawerMenuItem(r.getString(R.string.action_servers), R.drawable.ic_edit);
         mAdapter.addMenuItem(mManageServersItem);
-        mClearAllUnread = new DrawerMenuItem(r.getString(R.string.action_clear_all_unread), R.drawable.ic_notification_close);
+        mClearAllUnread = new DrawerMenuItem(r.getString(R.string.action_clear_all_unread), R.drawable.ic_notifications);
         mClearAllUnread.setOnClickListener((View view) -> {
             List<ServerConnectionInfo> serverConnections = ServerConnectionManager.getInstance(activity).getConnections();
             for (ServerConnectionInfo serverConnection : serverConnections) {
