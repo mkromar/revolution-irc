@@ -22,7 +22,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <ImageButton
-                android:id="@+id/buttonRight"
+                android:id="@+id/switch_server_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -31,7 +31,7 @@
                 app:srcCompat="@drawable/abc_vector_test" />
 
             <ImageButton
-                android:id="@+id/buttonLeft"
+                android:id="@+id/switch_server_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

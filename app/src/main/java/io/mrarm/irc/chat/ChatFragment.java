@@ -10,6 +10,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.core.widget.ImageViewCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,15 +92,57 @@ public class ChatFragment extends Fragment implements
 
         ((MainActivity) getActivity()).addActionBarDrawerToggle(toolbar);
 
-        ImageButton toolbarButtonLeft = rootView.findViewById(R.id.buttonLeft);
-        toolbarButtonLeft.setOnClickListener(v -> Toast.makeText(getContext(),
-                "Button left clicked",
-                Toast.LENGTH_LONG).show());
+        ImageButton toolbarServerSwitcherLeft = rootView.findViewById(R.id.switch_server_left);
+        toolbarServerSwitcherLeft.setOnClickListener((View v) -> {
+            List<ServerConnectionInfo> serverConnections = ServerConnectionManager.getInstance(getContext()).getConnections();
 
-        ImageButton toolbarButtonRight = rootView.findViewById(R.id.buttonRight);
-        toolbarButtonRight.setOnClickListener(v -> Toast.makeText(getContext(),
-                "Button right clicked",
-                Toast.LENGTH_LONG).show());
+            if (serverConnections.size() > 1) {
+                for (int i = serverConnections.size() - 1; i >= 0; i--) {
+                    ServerConnectionInfo serverConnection = serverConnections.get(i);
+                    if (serverConnection.equals(mConnectionInfo)) {
+                        ServerConnectionInfo nextServer;
+                        if (i - 1 >= 0) {
+                            nextServer = serverConnections.get(i - 1);
+                        } else {
+                            nextServer = serverConnections.get(serverConnections.size() - 1);
+                        }
+                        List<String> nextChannels = nextServer.getChannels();
+                        String nextChannel = null;
+                        if (nextChannels.size() > 0) {
+                            nextChannel = nextChannels.get(0);
+                        }
+                        ((MainActivity) getActivity()).openServer(nextServer, nextChannel);
+                        break;
+                    }
+                }
+            }
+        });
+
+        ImageButton toolbarServerSwitcherRight = rootView.findViewById(R.id.switch_server_right);
+        toolbarServerSwitcherRight.setOnClickListener((View v) -> {
+            List<ServerConnectionInfo> serverConnections = ServerConnectionManager.getInstance(getContext()).getConnections();
+
+            if (serverConnections.size() > 1) {
+                for (int i = 0; i < serverConnections.size(); i++) {
+                    ServerConnectionInfo serverConnection = serverConnections.get(i);
+                    if (serverConnection.equals(mConnectionInfo)) {
+                        ServerConnectionInfo nextServer = null;
+                        if (i+1 < serverConnections.size()) {
+                            nextServer = serverConnections.get(i+1);
+                        } else {
+                            nextServer = serverConnections.get(0);
+                        }
+                        List<String> nextChannels = nextServer.getChannels();
+                        String nextChannel = null;
+                        if (nextChannels.size() > 0) {
+                            nextChannel = nextChannels.get(0);
+                        }
+                        ((MainActivity) getActivity()).openServer(nextServer, nextChannel);
+                        break;
+                    }
+                }
+            }
+        });
 
         mSectionsPagerAdapter = new ChatPagerAdapter(getContext(), getChildFragmentManager(), mConnectionInfo, savedInstanceState);
 
