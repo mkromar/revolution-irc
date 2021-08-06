@@ -108,9 +108,21 @@ public class ChatFragment extends Fragment implements
                         }
                         List<String> nextChannels = nextServer.getChannels();
                         String nextChannel = null;
-                        if (nextChannels.size() > 0) {
+
+                        // Get the first channel with unread
+                        NotificationManager.ConnectionManager connectionManager = nextServer.getNotificationManager();
+                        for (String channel : nextChannels) {
+                            ChannelNotificationManager mgr = connectionManager.getChannelManager(channel, true);
+                            int msgCount = mgr.getUnreadMessageCount();
+                            if (msgCount > 0) {
+                                nextChannel = channel;
+                                break;
+                            }
+                        }
+                        if (nextChannel == null && nextChannels.size() > 0) {
                             nextChannel = nextChannels.get(0);
                         }
+
                         ((MainActivity) getActivity()).openServer(nextServer, nextChannel);
                         break;
                     }
@@ -132,11 +144,23 @@ public class ChatFragment extends Fragment implements
                         } else {
                             nextServer = serverConnections.get(0);
                         }
-                        List<String> nextChannels = nextServer.getChannels();
                         String nextChannel = null;
-                        if (nextChannels.size() > 0) {
+                        List<String> nextChannels = nextServer.getChannels();
+
+                        // Get the first channel with unread
+                        NotificationManager.ConnectionManager connectionManager = nextServer.getNotificationManager();
+                        for (String channel : nextChannels) {
+                            ChannelNotificationManager mgr = connectionManager.getChannelManager(channel, true);
+                            int msgCount = mgr.getUnreadMessageCount();
+                            if (msgCount > 0) {
+                                nextChannel = channel;
+                                break;
+                            }
+                        }
+                        if (nextChannel == null && nextChannels.size() > 0) {
                             nextChannel = nextChannels.get(0);
                         }
+
                         ((MainActivity) getActivity()).openServer(nextServer, nextChannel);
                         break;
                     }
