@@ -12,6 +12,7 @@ import android.view.View;
 
 import java.util.List;
 
+import io.mrarm.irc.IRCApplication;
 import io.mrarm.irc.MainActivity;
 import io.mrarm.irc.NotificationManager;
 import io.mrarm.irc.R;
@@ -37,6 +38,7 @@ public class DrawerHelper implements ServerConnectionManager.ConnectionsListener
     private DrawerMenuItem mSearchItem;
     private DrawerMenuItem mManageServersItem;
     private DrawerMenuItem mSettingsItem;
+    private DrawerMenuItem mExitItem;
     private boolean mHasRegisteredListeners = false;
 
     public DrawerHelper(Activity activity) {
@@ -66,6 +68,11 @@ public class DrawerHelper implements ServerConnectionManager.ConnectionsListener
             activity.startActivity(new Intent(activity, SettingsActivity.class));
         });
         mAdapter.addMenuItem(mSettingsItem);
+        mExitItem = new DrawerMenuItem(r.getString(R.string.action_exit), R.drawable.ic_close);
+        mExitItem.setOnClickListener((View view) -> {
+            ((IRCApplication) activity.getApplication()).requestExit();
+        });
+        mAdapter.addMenuItem(mExitItem);
 
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             boolean wasClosed = false;
