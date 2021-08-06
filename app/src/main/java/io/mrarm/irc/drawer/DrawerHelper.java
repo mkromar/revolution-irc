@@ -12,6 +12,7 @@ import android.view.View;
 
 import java.util.List;
 
+import io.mrarm.irc.ChannelNotificationManager;
 import io.mrarm.irc.IRCApplication;
 import io.mrarm.irc.MainActivity;
 import io.mrarm.irc.NotificationManager;
@@ -37,6 +38,7 @@ public class DrawerHelper implements ServerConnectionManager.ConnectionsListener
     private DrawerMenuListAdapter mAdapter;
     private DrawerMenuItem mSearchItem;
     private DrawerMenuItem mManageServersItem;
+    private DrawerMenuItem mClearAllUnread;
     private DrawerMenuItem mSettingsItem;
     private DrawerMenuItem mExitItem;
     private boolean mHasRegisteredListeners = false;
@@ -63,6 +65,20 @@ public class DrawerHelper implements ServerConnectionManager.ConnectionsListener
         mAdapter.addTopMenuItem(mSearchItem);
         mManageServersItem = new DrawerMenuItem(r.getString(R.string.action_servers), R.drawable.ic_edit);
         mAdapter.addMenuItem(mManageServersItem);
+        mClearAllUnread = new DrawerMenuItem(r.getString(R.string.action_clear_all_unread), R.drawable.ic_notifications);
+        mClearAllUnread.setOnClickListener((View view) -> {
+            List<ServerConnectionInfo> serverConnections = ServerConnectionManager.getInstance(activity).getConnections();
+            for (ServerConnectionInfo serverConnection : serverConnections) {
+                NotificationManager.ConnectionManager connectionManager = serverConnection.getNotificationManager();
+                List<String> channels = serverConnection.getChannels();
+                for (String channel : channels) {
+                    ChannelNotificationManager mgr = connectionManager.getChannelManager(channel, true);
+                    mgr.clearUnreadMessages();
+                }
+            }
+            mDrawerLayout.closeDrawers();
+        });
+        mAdapter.addMenuItem(mClearAllUnread);
         mSettingsItem = new DrawerMenuItem(r.getString(R.string.action_settings), R.drawable.ic_settings);
         mSettingsItem.setOnClickListener((View view) -> {
             activity.startActivity(new Intent(activity, SettingsActivity.class));
